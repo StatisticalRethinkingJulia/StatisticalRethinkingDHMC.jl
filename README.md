@@ -59,8 +59,8 @@ using Pkg, DrWatson
 # needed, it must be loaded before StatisticalRethinking:
 
 @quickactivate "StatisticalRethinkingDHMC"
-using StanSample
-using StanOptimize              # If quap() is used.
+using LogDensityProblems, DynamicHMC 
+using Parameters, TransformVariables
 using StatisticalRethinking
 
 # To access e.g. the Howell1.csv data file:
@@ -79,12 +79,12 @@ Clips are named as `clip-cc-fs-ls[s|t|d].jl` where
 * `ls`               : Last snippet in clip
 * `[s|sl|t|d|m]`     : Mcmc flavor used (s : Stan, t : Turing)
 
-Note: `d` is reserved for a combination Soss/DynamicHMC, `sl` is reserved for Stan models using the `logpdf` formulation and `m` for Mamba.
+A `d` is reserved for DynamicHMC models and notebooks.
 
 The notebooks containing the clips are stored by chapter. In addition to clips, in the early notebook chapters (0-3) it is also shown how to create some of the figures in the book, e.g. `Fig2.5s.jl` in `notebooks/chapter/02`.
 
 Special introductory notebooks have been included in `notebooks/intros`, e.g.
-`intro-stan/intro-stan-01s.jl` and `intro-R-users/distributions.jl`. It is suggested to at least glance over the `intro-stan` notebooks.
+`intro-stan/intro-dhmc-1d.jl`.
 
 Great introductory notebooks showing Julia and statistics ( based on the [Statistics with Julia](https://statisticswithjulia.org/index.html) book ) can be found in [StatisticsWithJuliaPlutoNotebooks](https://github.com/StatisticalRethinkingJulia/StatisticsWithJuliaPlutoNotebooks.jl).
 
@@ -93,28 +93,24 @@ One goal for the changes in StatisticalRethinking v3 was to make it easier to co
 Models:
 
 0. stan5_1           : Stan language program
-1. m5_1s             : The sampled StanSample model
-2. q5_1s             : Stan quap model (NamedTuple similar to Turing)
+1. m5_1d             : The sampled StanSample model
+2. q5_1d             : Stan quap model (NamedTuple similar to Turing)
 
 Draws:
 
-3. chns5_1s          : MCMCChains object (4000 samples from 4 chains)
-4. part5_1s          : Stan samples (Particles notation)
-5. quap5_1s          : Quap samples (Particles notation)
-6. nt5_1s            : NamedTuple with samples values (default for `read_samples(m5_1s)`)
+3. chns5_1d          : MCMCChains object (4000 samples from 4 chains)
+4. part5_1d          : Stan samples (Particles notation)
+5. quap5_1d          : Quap samples (Particles notation)
+6. nt5_1d            : NamedTuple with samples values (default for `read_samples(m5_1s)`)
 
 Results as a DataFrame:
 
-7. prior5_1s_df      : Prior samples (DataFrame)
-8. post5_1s_df       : Posterior samples (DataFrame)
-9. quap5_1s_df       : Quap approximation to posterior samples (DataFrame)
-10.pred5_1s_df       : Posterior predictions (DataFrame)
+7. prior5_1d_df      : Prior samples (DataFrame)
+8. post5_1d_df       : Posterior samples (DataFrame)
+9. quap5_1d_df       : Quap approximation to posterior samples (DataFrame)
+10.pred5_1d_df       : Posterior predictions (DataFrame)
 
-As before, the `s` at the end indicates Stan.
-
-By default `read_samples(m5_1s)` returns a NamedTuple with the results.
-
-Using `read_samples(m5_1s; output_format=:...)` makes it easy to create MCMCChains.jl Chains objects, a DataFrame with draws or a MonteCarloMeasurements.jl Particles object (item 4 in above list).
+The mentioned earlier, `d` indicates DynamicHMC.
 
 ## Status
 
